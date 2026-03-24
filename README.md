@@ -79,6 +79,18 @@ pnpm dev:front
 - OpenAPI JSON: `http://localhost:3101/api-docs-json`
 - MinIO Console: `http://localhost:19001`
 
+### 线上演示
+
+- 前端演示地址：`http://cow.zenoly.cn/login`
+- 测试账号：`admin`
+- 测试密码：`123456`
+- 后端接口文档：`http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81`
+
+### 独立仓库
+
+- 如果需要单独的后端，请访问：`https://github.com/rowan766/nest-front-backend`
+- 如果需要单独的前端，请访问：`https://github.com/rowan766/admin-front`
+
 ### 前后端联调关系
 
 - 前端开发服务器默认把 `/api` 代理到 `http://localhost:3101`
@@ -201,6 +213,18 @@ pnpm dev:front
 - API Docs: `http://localhost:3101/api-docs`
 - OpenAPI JSON: `http://localhost:3101/api-docs-json`
 - MinIO Console: `http://localhost:19001`
+
+### Online Demo
+
+- Frontend demo: `http://cow.zenoly.cn/login`
+- Demo account: `admin`
+- Demo password: `123456`
+- API docs: `http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81`
+
+### Standalone Repositories
+
+- Standalone backend: `https://github.com/rowan766/nest-front-backend`
+- Standalone frontend: `https://github.com/rowan766/admin-front`
 
 ### Local integration
 
