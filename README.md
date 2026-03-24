@@ -88,7 +88,7 @@ pnpm dev:front
 
 ### 独立仓库
 
-- 如果需要单独的后端，请访问：`https://github.com/rowan766/nest-front-backend`
+- 如果需要单独的后端，请访问：`https://github.com/rowan766/nest-backend`
 - 如果需要单独的前端，请访问：`https://github.com/rowan766/admin-front`
 
 ### 前后端联调关系
