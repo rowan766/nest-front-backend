@@ -81,15 +81,15 @@ pnpm dev:front
 
 ### 线上演示
 
-- 前端演示地址：`http://cow.zenoly.cn/login`
+- 前端演示地址：[http://cow.zenoly.cn/login](http://cow.zenoly.cn/login)
 - 测试账号：`admin`
 - 测试密码：`123456`
-- 后端接口文档：`http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81`
+- 后端接口文档：[http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81](http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81)
 
 ### 独立仓库
 
-- 如果需要单独的后端，请访问：`[https://github.com/rowan766/admin-backend](https://github.com/rowan766/admin-backend)`
-- 如果需要单独的前端，请访问：`https://github.com/rowan766/admin-front`
+- 如果需要单独的后端，请访问：[https://github.com/rowan766/admin-backend](https://github.com/rowan766/admin-backend)
+- 如果需要单独的前端，请访问：[https://github.com/rowan766/admin-front](https://github.com/rowan766/admin-front)
 
 ### 前后端联调关系
 
@@ -216,15 +216,15 @@ pnpm dev:front
 
 ### Online Demo
 
-- Frontend demo: `http://cow.zenoly.cn/login`
+- Frontend demo: [http://cow.zenoly.cn/login](http://cow.zenoly.cn/login)
 - Demo account: `admin`
 - Demo password: `123456`
-- API docs: `http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81`
+- API docs: [http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81](http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81)
 
 ### Standalone Repositories
 
-- Standalone backend: `https://github.com/rowan766/nest-front-backend`
-- Standalone frontend: `https://github.com/rowan766/admin-front`
+- Standalone backend: [https://github.com/rowan766/admin-backend](https://github.com/rowan766/admin-backend)
+- Standalone frontend: [https://github.com/rowan766/admin-front](https://github.com/rowan766/admin-front)
 
 ### Local integration
 
