@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: nestjs-project1-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: admin_system
+    ports:
+      - "${POSTGRES_BIND_HOST:-127.0.0.1}:${POSTGRES_HOST_PORT:-15432}:5432"
+    volumes:
+      - "${POSTGRES_DATA_DIR:-/srv/zenoly-data/cow/postgres}:/var/lib/postgresql/data"
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ..
+      dockerfile: admin-backend/Dockerfile
+    container_name: nestjs-project1-backend
+    restart: always
+    ports:
+      - "${BACKEND_BIND_HOST:-127.0.0.1}:${BACKEND_HOST_PORT:-3101}:3001"
+    env_file:
+      - ./.env.server
+    depends_on:
+      - postgres
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

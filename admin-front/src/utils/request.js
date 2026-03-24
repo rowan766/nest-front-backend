@@ -1,12 +1,10 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-
-// 开发环境使用代理，生产环境使用完整URL
-const BASE_URL = import.meta.env.DEV ? '/api' : 'http://8.130.84.165:3001'
+import { API_BASE_URL } from './api-base-url'
 
 // 创建 axios 实例
 const request = axios.create({
-  baseURL: BASE_URL,
+  baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'

@@ -131,7 +131,12 @@ async function setupSwagger(
   const document = SwaggerModule.createDocument(app, config, {
     autoTagControllers: false,
   });
-
+  document.servers = [
+    {
+      url: '/api',
+      description: 'Nginx reverse proxy base path',
+    },
+  ];
   applyDocumentMetadata(document);
 
   app.getHttpAdapter()

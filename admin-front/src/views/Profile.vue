@@ -110,20 +110,18 @@ import { ref, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { UserFilled, Edit, Lock } from '@element-plus/icons-vue'
 import { useUserStore } from '../stores/user'
+import { buildApiUrl } from '../utils/api-base-url'
 
 const userStore = useUserStore()
 
 // 头像URL - 根据avatarId生成
 const avatarUrl = computed(() => {
-  console.log('6666=>',userStore.userInfo)
   const avatarId = userStore.userInfo?.avatarId
 
   if (avatarId) {
-    // 使用与request.js相同的baseURL配置
-    const baseURL = import.meta.env.DEV ? '/api' : 'http://8.130.84.165:3001'
-    return `${baseURL}/upload/image/${avatarId}?download=false`
-    console.log('7777=>',baseURL)
+    return buildApiUrl(`/upload/image/${avatarId}?download=false`)
   }
+
   return ''
 })
 
