@@ -1,0 +1,20 @@
+{
+  "name": "nest-front-backend",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.18.0",
+  "scripts": {
+    "dev:front": "pnpm --dir admin-front dev",
+    "dev:backend": "pnpm --dir admin-backend start:dev",
+    "build:front": "pnpm --dir admin-front build",
+    "build:backend": "pnpm --dir admin-backend build",
+    "build": "pnpm -r build",
+    "lint:backend": "pnpm --dir admin-backend lint",
+    "test:backend": "pnpm --dir admin-backend test",
+    "test:e2e:backend": "pnpm --dir admin-backend test:e2e",
+    "db:push": "pnpm --dir admin-backend exec prisma db push",
+    "docker:deps:up": "docker compose -f admin-backend/docker-compose.yml up -d postgres redis minio",
+    "docker:backend:up": "docker compose -f admin-backend/docker-compose.yml up -d --build backend",
+    "docker:down": "docker compose -f admin-backend/docker-compose.yml down"
+  }
+}

@@ -1,0 +1,68 @@
+services:
+  # PostgreSQL 数据库
+  postgres:
+    image: postgres:15-alpine
+    container_name: nestjs-project1-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: admin_system
+    ports:
+      - "${POSTGRES_HOST_PORT:-15432}:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # MinIO 对象存储
+  minio:
+    image: minio/minio
+    container_name: nestjs-project1-minio
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: 12345678
+    ports:
+      - "${MINIO_HOST_PORT:-19000}:9000"
+      - "${MINIO_CONSOLE_HOST_PORT:-19001}:9001"
+    volumes:
+      - ./data/minio:/data
+    networks:
+      - app-network
+
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    container_name: nestjs-project1-redis
+    restart: always
+    command: redis-server --requirepass "123456"  # 添加密码
+    ports:
+      - "${REDIS_HOST_PORT:-16379}:6379"
+    volumes:
+      - ./data/redis:/data
+    networks:
+      - app-network
+
+  # NestJS 后端服务
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestjs-project1-backend
+    restart: always
+    ports:
+      - "${BACKEND_HOST_PORT:-3101}:3001"
+    env_file:
+      - ./.env.docker
+    depends_on:
+      - postgres
+      - minio
+      - redis
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

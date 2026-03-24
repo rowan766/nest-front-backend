@@ -1,0 +1,114 @@
+# ==================== 依赖 ====================
+node_modules/
+.pnpm-store/
+/.pnp
+.pnp.js
+
+# ==================== 构建输出 ====================
+/dist
+/build
+.next/
+out/
+
+# ==================== Prisma ====================
+/generated/prisma
+.prisma/
+
+# ==================== 环境变量（敏感信息）====================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.production
+
+# 保留示例文件
+!.env.example
+!.env.production.example
+
+# ==================== 日志 ====================
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ==================== 测试 ====================
+/coverage
+/.nyc_output
+/test-results/
+/playwright-report/
+
+# ==================== 临时文件 ====================
+.temp/
+.tmp/
+*.swp
+*.swo
+*~
+
+# ==================== 运行时数据 ====================
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# ==================== 诊断报告 ====================
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# ==================== 操作系统 ====================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ==================== IDE - VSCode ====================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# ==================== IDE - 其他 ====================
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# ==================== Docker ====================
+# 注意：docker-compose.yml 应该提交
+# .dockerignore 应该提交
+docker-compose.override.yml
+data/
+
+# ==================== 其他 ====================
+# 锁文件冲突备份
+*.lock.*.bak
+
+# 编辑器备份文件
+*~
+*.bak
+*.tmp
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.rar
+
+# 数据库备份文件
+*.sql
+*.dump
+*.backup

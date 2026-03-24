@@ -1,0 +1,232 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== 用户相关 ====================
+
+// 用户表
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique @db.VarChar(50)
+  password     String   @db.VarChar(255)
+  nickname     String?  @db.VarChar(50)
+  email        String?  @unique @db.VarChar(100)
+  phone        String?  @db.VarChar(20)
+  avatar       String?  @db.VarChar(255) // 头像文件路径（保留兼容）
+  avatarId     Int?     @map("avatar_id") // 头像文件ID
+  avatarName   String?  @map("avatar_name") @db.VarChar(255) // 头像文件名
+  departmentId Int?     @map("department_id") // 所属部门
+  status       Int      @default(1) @db.SmallInt // 1:启用 0:禁用
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // 关联
+  department Department? @relation(fields: [departmentId], references: [id])
+  roles      UserRole[]
+
+  @@map("sys_user")
+}
+
+// 部门表（支持树形结构）
+model Department {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(50) // 部门名称
+  code        String?  @unique @db.VarChar(50) // 部门编码
+  parentId    Int?     @map("parent_id") // 父部门ID（支持树形结构）
+  leaderId    Int?     @map("leader_id") // 部门负责人ID
+  phone       String?  @db.VarChar(20) // 部门电话
+  email       String?  @db.VarChar(100) // 部门邮箱
+  sort        Int      @default(0) // 排序
+  status      Int      @default(1) @db.SmallInt // 状态：1启用 0禁用
+  description String?  @db.VarChar(200) // 部门描述
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // 关联
+  users User[]
+  roles RoleDepartment[]
+
+  @@map("sys_department")
+}
+
+// ==================== 角色权限相关 ====================
+
+// 角色表
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.VarChar(50) // 角色名称
+  code        String   @unique @db.VarChar(50) // 角色编码（如：admin, user）
+  description String?  @db.VarChar(200) // 角色描述
+  dataScope   Int      @default(1) @map("data_scope") // 数据权限范围：1全部 2本部门及以下 3本部门 4仅本人 5自定义
+  sort        Int      @default(0) // 排序
+  status      Int      @default(1) @db.SmallInt // 状态：1启用 0禁用
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // 关联
+  users       UserRole[]
+  menus       RoleMenu[]
+  permissions RolePermission[]
+  departments RoleDepartment[] // 自定义数据权限的部门列表
+
+  @@map("sys_role")
+}
+
+// 菜单表（包含菜单和按钮）
+model Menu {
+  id         Int      @id @default(autoincrement())
+  parentId   Int?     @map("parent_id") // 父菜单ID（支持树形结构）
+  name       String   @db.VarChar(50) // 菜单名称（路由name）
+  title      String   @db.VarChar(50) // 菜单标题（显示名称）
+  type       String   @db.VarChar(20) // 类型：menu菜单 button按钮
+  path       String?  @db.VarChar(200) // 路由路径（菜单用）
+  component  String?  @db.VarChar(200) // 组件路径（菜单用）
+  permission String?  @db.VarChar(100) // 权限标识（按钮用，如：user:create）
+  icon       String?  @db.VarChar(50) // 图标
+  sort       Int      @default(0) // 排序
+  visible    Int      @default(1) @db.SmallInt // 是否可见：1可见 0隐藏
+  status     Int      @default(1) @db.SmallInt // 状态：1启用 0禁用
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // 关联
+  roles RoleMenu[]
+
+  @@map("sys_menu")
+}
+
+// 权限表（API接口权限）
+model Permission {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(50) // 权限名称
+  code        String   @unique @db.VarChar(100) // 权限编码（如：user:create）
+  path        String?  @db.VarChar(200) // API路径
+  method      String?  @db.VarChar(10) // 请求方法（GET/POST/PUT/DELETE）
+  description String?  @db.VarChar(200) // 权限描述
+  status      Int      @default(1) @db.SmallInt // 状态：1启用 0禁用
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // 关联
+  roles RolePermission[]
+
+  @@map("sys_permission")
+}
+
+// ==================== 关联表 ====================
+
+// 用户-角色关联表（多对多）
+model UserRole {
+  userId    Int      @map("user_id")
+  roleId    Int      @map("role_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("sys_user_role")
+}
+
+// 角色-菜单关联表（多对多）
+model RoleMenu {
+  roleId    Int      @map("role_id")
+  menuId    Int      @map("menu_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  menu Menu @relation(fields: [menuId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, menuId])
+  @@map("sys_role_menu")
+}
+
+// 角色-权限关联表（多对多）
+model RolePermission {
+  roleId       Int      @map("role_id")
+  permissionId Int      @map("permission_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("sys_role_permission")
+}
+
+// 角色-部门关联表（用于自定义数据权限）
+model RoleDepartment {
+  roleId       Int      @map("role_id")
+  departmentId Int      @map("department_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, departmentId])
+  @@map("sys_role_department")
+}
+
+// ==================== 文件管理 ====================
+
+// 文件上传记录表
+model File {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @map("user_id") // 上传用户ID
+  bucketName   String   @map("bucket_name") @db.VarChar(100) // 存储桶名称
+  bucketType   String   @map("bucket_type") @db.VarChar(50) // 桶类型：userAvatar/product/document/archive/common
+  folder       String   @db.VarChar(100) // 文件夹路径（如：avatars、files）
+  fileName     String   @map("file_name") @db.VarChar(255) // 存储的文件名（含时间戳和路径）
+  originalName String   @map("original_name") @db.VarChar(255) // 原始文件名
+  fileSize     Int      @map("file_size") // 文件大小（字节）
+  mimeType     String   @map("mime_type") @db.VarChar(100) // 文件MIME类型
+  fileUrl      String   @map("file_url") @db.Text // 文件访问URL
+  status       Int      @default(1) @db.SmallInt // 状态：1正常 0已删除
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("sys_file")
+}
+
+// ==================== 数据字典 ====================
+
+// 字典类型表
+model DictType {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(50) // 字典名称
+  code        String   @unique @db.VarChar(50) // 字典编码（唯一标识，如：user_gender）
+  description String?  @db.VarChar(200) // 字典描述
+  sort        Int      @default(0) // 排序
+  status      Int      @default(1) @db.SmallInt // 状态：1启用 0禁用
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // 关联
+  items DictData[]
+
+  @@map("sys_dict_type")
+}
+
+// 字典数据表
+model DictData {
+  id         Int      @id @default(autoincrement())
+  dictTypeId Int      @map("dict_type_id") // 所属字典类型
+  label      String   @db.VarChar(50) // 字典标签（显示值）
+  value      String   @db.VarChar(50) // 字典值（实际值）
+  sort       Int      @default(0) // 排序
+  cssClass   String?  @map("css_class") @db.VarChar(50) // 样式类名
+  remark     String?  @db.VarChar(200) // 备注
+  status     Int      @default(1) @db.SmallInt // 状态：1启用 0禁用
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // 关联
+  dictType DictType @relation(fields: [dictTypeId], references: [id], onDelete: Cascade)
+
+  @@map("sys_dict_data")
+}

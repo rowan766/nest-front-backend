@@ -1,0 +1,34 @@
+# ==================== 必须上传的文件 ====================
+
+# 源代码
+src/
+
+# 数据库
+prisma/schema.prisma
+prisma/migrations/
+
+# 依赖配置
+package.json
+pnpm-lock.yaml
+
+# 项目配置
+tsconfig.json
+nest-cli.json
+.dockerignore
+.prettierrc
+eslint.config.mjs
+
+# 环境变量模板
+.env.example
+
+# ==================== 不要上传的文件 ====================
+# node_modules/      ❌ 太大，服务器会重新安装
+# dist/              ❌ 会在服务器重新构建
+# .git/              ❌ Git 历史记录
+# .env               ❌ 敏感信息，单独配置
+# .vscode/           ❌ IDE 配置
+# .claude/           ❌ IDE 配置
+# .idea/             ❌ IDE 配置
+# test/              ❌ 测试文件
+# *.log              ❌ 日志文件
+# .DS_Store          ❌ 系统文件

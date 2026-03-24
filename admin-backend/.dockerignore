@@ -1,0 +1,91 @@
+# ==================== 依赖（会在 Docker 内重新安装）====================
+node_modules/
+.pnpm-store/
+.npm/
+.yarn/
+
+# ==================== 构建输出（会在 Docker 内重新构建）====================
+dist/
+build/
+.next/
+out/
+
+# ==================== Git 相关 ====================
+.git/
+.gitignore
+.gitattributes
+
+# ==================== 环境变量 ====================
+# 注意：.env 文件通常通过 docker-compose 的 env_file 或环境变量传入
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 但保留示例文件（方便参考）
+!.env.example
+!.env.production.example
+
+# ==================== 测试文件 ====================
+test/
+tests/
+*.test.ts
+*.spec.ts
+coverage/
+.nyc_output/
+
+# ==================== 临时文件 ====================
+.temp/
+.tmp/
+*.swp
+*.swo
+*~
+
+# ==================== 日志 ====================
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==================== IDE ====================
+.vscode/
+.idea/
+*.iml
+.DS_Store
+.claude/
+
+# ==================== Docker ====================
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# ==================== CI/CD ====================
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# ==================== 文档 ====================
+README.md
+CHANGELOG.md
+LICENSE
+
+# ==================== 其他 ====================
+*.md
+!prisma/README.md
+.prettierrc
+.eslintrc*
+.editorconfig
+
+# ==================== Prisma 生成的文件 ====================
+generated/
+.prisma/
+
+# ==================== 备份文件 ====================
+*.bak
+*.backup
+*.old
+*.sql
+*.dump
