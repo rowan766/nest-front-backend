@@ -30,6 +30,32 @@
             show-password
           />
         </el-form-item>
+        <el-form-item prop="captchaCode">
+          <div class="captcha-row">
+            <el-input
+              v-model="loginForm.captchaCode"
+              placeholder="请输入验证码"
+              size="large"
+              class="captcha-input"
+            />
+            <button
+              type="button"
+              class="captcha-image-button"
+              :disabled="captchaLoading"
+              @click="fetchCaptcha"
+            >
+              <img
+                v-if="captchaImage"
+                :src="captchaImage"
+                alt="验证码"
+                class="captcha-image"
+              />
+              <span v-else class="captcha-placeholder">
+                {{ captchaLoading ? '加载中...' : '获取验证码' }}
+              </span>
+            </button>
+          </div>
+        </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
@@ -47,20 +73,25 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '../stores/user'
+import { getCaptcha } from '../api/auth'
 
 const router = useRouter()
 const userStore = useUserStore()
 
 const loginFormRef = ref(null)
 const loading = ref(false)
+const captchaLoading = ref(false)
+const captchaImage = ref('')
 
 const loginForm = reactive({
   username: 'admin',
-  password: '123456'
+  password: '123456',
+  captchaId: '',
+  captchaCode: ''
 })
 
 const rules = {
@@ -70,7 +101,25 @@ const rules = {
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 6, message: '密码长度不能小于6位', trigger: 'blur' }
+  ],
+  captchaCode: [
+    { required: true, message: '请输入验证码', trigger: 'blur' },
+    { min: 4, message: '验证码长度不能小于4位', trigger: 'blur' }
   ]
+}
+
+const fetchCaptcha = async () => {
+  captchaLoading.value = true
+  try {
+    const res = await getCaptcha()
+    loginForm.captchaId = res.data.captchaId
+    loginForm.captchaCode = ''
+    captchaImage.value = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(res.data.captchaSvg)}`
+  } catch (error) {
+    captchaImage.value = ''
+  } finally {
+    captchaLoading.value = false
+  }
 }
 
 const handleLogin = async () => {
@@ -85,12 +134,17 @@ const handleLogin = async () => {
         router.push('/')
       } catch (error) {
         ElMessage.error(error.message || '登录失败')
+        fetchCaptcha()
       } finally {
         loading.value = false
       }
     }
   })
 }
+
+onMounted(() => {
+  fetchCaptcha()
+})
 </script>
 
 <style scoped>
@@ -133,5 +187,47 @@ const handleLogin = async () => {
 
 .login-button {
   width: 100%;
+}
+
+.captcha-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.captcha-input {
+  flex: 1;
+}
+
+.captcha-image-button {
+  width: 132px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.captcha-image-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.captcha-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.captcha-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: #606266;
+  font-size: 13px;
 }
 </style>

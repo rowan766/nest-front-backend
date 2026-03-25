@@ -1,5 +1,10 @@
 import request from '../utils/request'
 
+// 获取验证码
+export const getCaptcha = () => {
+  return request.get('/auth/captcha')
+}
+
 // 登录
 export const login = (data) => {
   return request.post('/auth/login', data)

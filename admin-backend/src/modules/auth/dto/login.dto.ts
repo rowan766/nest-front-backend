@@ -10,4 +10,13 @@ export class LoginDto {
   @IsString()
   @MinLength(6)
   password: string;
+
+  @ApiProperty({ description: '验证码ID', example: 'captcha_xxx' })
+  @IsString()
+  captchaId: string;
+
+  @ApiProperty({ description: '验证码', example: 'ABCD' })
+  @IsString()
+  @MinLength(4)
+  captchaCode: string;
 }

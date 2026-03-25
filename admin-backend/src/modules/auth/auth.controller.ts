@@ -1,4 +1,4 @@
-import { Controller, Post, Body ,UseGuards, Request} from '@nestjs/common';
+import { Controller, Post, Body ,UseGuards, Request, Get } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse,ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -8,6 +8,13 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Get('captcha')
+  @ApiOperation({ summary: '获取登录验证码' })
+  @ApiResponse({ status: 200, description: '获取验证码成功' })
+  async getCaptcha() {
+    return this.authService.createCaptcha();
+  }
 
   @Post('login')
   @ApiOperation({ summary: '用户登录' })
