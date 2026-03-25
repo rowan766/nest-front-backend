@@ -44,8 +44,8 @@
 - 演示账号：`admin`
 - 演示密码：`123456`
 - 后端接口文档：[http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81](http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81)
-- 如果你准备在 GitHub 项目首页展示，建议补充登录页、用户管理页、角色菜单页、字典管理页截图
 
+![alt text](image.png) ![alt text](image-1.png)![alt text](image-2.png)![alt text](image-3.png)![alt text](image-4.png)![alt text](image-5.png)![alt text](image-6.png)![alt text](image-7.png)
 ### 你能直接拿去做什么
 
 - 作为公司内部管理后台的初始工程
