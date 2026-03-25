@@ -38,6 +38,14 @@
 - 开箱即用又便于二开：既可以直接作为中后台脚手架使用，也适合作为团队内部管理平台、权限平台、SaaS 控台底座
 - 单仓协作更省心：前后端放在同一个 monorepo 中，统一依赖、统一命令、统一说明，降低项目维护和交接成本
 
+### 项目预览
+
+- 在线体验地址：[http://cow.zenoly.cn/login](http://cow.zenoly.cn/login)
+- 演示账号：`admin`
+- 演示密码：`123456`
+- 后端接口文档：[http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81](http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81)
+- 如果你准备在 GitHub 项目首页展示，建议补充登录页、用户管理页、角色菜单页、字典管理页截图
+
 ### 你能直接拿去做什么
 
 - 作为公司内部管理后台的初始工程
@@ -75,45 +83,166 @@
 - pnpm 8+
 - Docker Desktop / Docker Compose
 
-### 快速开始
+### 本地运行前提
 
-1. 安装依赖
+在本地启动项目前，请先确认下面 3 个依赖服务已经可用：
 
-```bash
-pnpm install
-```
+- PostgreSQL
+- Redis
+- MinIO
 
-2. 启动后端依赖服务
+这个仓库默认约定的本地端口如下：
+
+- PostgreSQL: `localhost:15432`
+- Redis: `localhost:16379`
+- MinIO API: `localhost:19000`
+- MinIO Console: `localhost:19001`
+
+如果你不想手动一个个启动，直接执行下面这条命令即可拉起本地依赖服务：
 
 ```bash
 pnpm docker:deps:up
 ```
 
-3. 同步数据库结构
+### 本地快速开始
+
+1. 克隆项目
+
+```bash
+git clone https://github.com/rowan766/nest-front-backend.git
+cd nest-front-backend
+```
+
+2. 安装依赖
+
+```bash
+pnpm install
+```
+
+3. 启动 PostgreSQL、Redis、MinIO
+
+```bash
+pnpm docker:deps:up
+```
+
+4. 同步数据库表结构
 
 ```bash
 pnpm db:push
 ```
 
-4. 启动后端
+5. 启动后端
 
 ```bash
 pnpm dev:backend
 ```
 
-5. 启动前端
+6. 启动前端
 
 ```bash
 pnpm dev:front
 ```
 
-### 默认访问地址
+### 推荐启动顺序
+
+为了避免第一次启动时连接失败，建议按下面顺序运行：
+
+1. `pnpm docker:deps:up`
+2. `pnpm install`
+3. `pnpm db:push`
+4. `pnpm dev:backend`
+5. `pnpm dev:front`
+
+### 首次初始化说明
+
+`pnpm db:push` 只会创建数据库表结构，不会自动导入管理员账号、角色、菜单、字典等业务数据。
+
+也就是说，如果你是第一次 clone 仓库并且使用的是全新的本地数据库，那么：
+
+- 后端可以正常启动
+- 前端页面也可以打开
+- 但如果数据库里没有初始化管理员和菜单数据，登录后可能无法进入完整系统
+
+如果你希望本地体验完整后台能力，建议至少准备：
+
+- 一个管理员账号
+- 基础角色数据
+- 基础菜单数据
+- 用户与角色、角色与菜单的关联数据
+
+### 导入仓库内置示例数据
+
+仓库根目录已经提供了一份示例数据文件：
+
+- [admin_system_dump_utf8.sql](./admin_system_dump_utf8.sql)
+
+如果你已经启动了本地 PostgreSQL 容器，并且端口映射为 `15432:5432`，可以按下面步骤导入这份示例数据。
+
+1. 先确认本地 PostgreSQL 已启动
+
+```bash
+docker ps
+```
+
+2. 如果数据库还没有创建，先创建 `admin_system`
+
+```bash
+docker exec -it nestjs-project1-postgres psql -U postgres -c "CREATE DATABASE admin_system;"
+```
+
+3. 如果你想覆盖成仓库附带的完整示例数据，建议先重建数据库
+
+```bash
+docker exec -it nestjs-project1-postgres psql -U postgres -c "DROP DATABASE IF EXISTS admin_system;"
+docker exec -it nestjs-project1-postgres psql -U postgres -c "CREATE DATABASE admin_system;"
+```
+
+4. 导入示例 SQL
+
+Windows PowerShell:
+
+```powershell
+Get-Content .\admin_system_dump_utf8.sql | docker exec -i nestjs-project1-postgres psql -U postgres -d admin_system
+```
+
+macOS / Linux / Git Bash:
+
+```bash
+docker exec -i nestjs-project1-postgres psql -U postgres -d admin_system < admin_system_dump_utf8.sql
+```
+
+5. 导入完成后，再启动后端和前端
+
+```bash
+pnpm dev:backend
+pnpm dev:front
+```
+
+导入成功后，你就可以直接使用仓库中已有的管理员、角色、菜单等基础数据进行体验，而不需要手动一条条创建。
+
+### 本地访问地址
 
 - Frontend: `http://localhost:5173`
 - Backend: `http://localhost:3101`
 - API Docs: `http://localhost:3101/api-docs`
 - OpenAPI JSON: `http://localhost:3101/api-docs-json`
 - MinIO Console: `http://localhost:19001`
+
+### 本地联调说明
+
+- 前端开发服务器默认会把 `/api` 代理到 `http://localhost:3101`
+- 所以前端本地访问接口时，不需要手动改成完整后端域名
+- 只要后端本地启动成功，前端就可以直接联调
+- 本地开发使用的是仓库中的本地环境配置，不会影响你服务器上的生产配置
+
+### 常见问题
+
+- `pnpm db:push` 成功了但登录失败：
+  这通常不是后端没启动，而是数据库里还没有初始化管理员账号或菜单数据
+- 前端能打开但接口请求失败：
+  请先确认后端是否成功运行在 `http://localhost:3101`
+- 文件上传失败：
+  请确认 MinIO 已启动，并且本地端口是 `19000 / 19001`
 
 ### 线上演示
 
@@ -209,6 +338,14 @@ It focuses on three things:
 - Suitable both as a starter kit for business admin projects and as a reusable foundation for internal platforms or SaaS control panels
 - Monorepo collaboration model that keeps frontend and backend aligned with shared tooling, shared commands, and lower maintenance overhead
 
+### Preview
+
+- Online demo: [http://cow.zenoly.cn/login](http://cow.zenoly.cn/login)
+- Demo account: `admin`
+- Demo password: `123456`
+- API docs: [http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81](http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81)
+- For a stronger GitHub presentation, it is recommended to add screenshots for the login page, user management, role/menu management, and dictionary management
+
 ### What You Can Build With It
 
 - Internal enterprise admin systems
@@ -246,45 +383,186 @@ It focuses on three things:
 - pnpm 8+
 - Docker Desktop / Docker Compose
 
-### Quick Start
+### Prerequisites For Local Development
 
-1. Install dependencies
+Before running the project locally, make sure these three services are available:
 
-```bash
-pnpm install
-```
+- PostgreSQL
+- Redis
+- MinIO
 
-2. Start backend dependencies
+This repository assumes the following local ports by default:
+
+- PostgreSQL: `localhost:15432`
+- Redis: `localhost:16379`
+- MinIO API: `localhost:19000`
+- MinIO Console: `localhost:19001`
+
+If you want to start them with one command, run:
 
 ```bash
 pnpm docker:deps:up
 ```
 
-3. Push Prisma schema
+### Local Quick Start
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/rowan766/nest-front-backend.git
+cd nest-front-backend
+```
+
+2. Install dependencies
+
+```bash
+pnpm install
+```
+
+3. Start PostgreSQL, Redis, and MinIO
+
+```bash
+pnpm docker:deps:up
+```
+
+4. Push the Prisma schema
 
 ```bash
 pnpm db:push
 ```
 
-4. Start backend
+5. Start the backend
 
 ```bash
 pnpm dev:backend
 ```
 
-5. Start frontend
+6. Start the frontend
 
 ```bash
 pnpm dev:front
 ```
 
-### Default URLs
+### Recommended Startup Order
+
+For a smoother first-time run, use this order:
+
+1. `pnpm docker:deps:up`
+2. `pnpm install`
+3. `pnpm db:push`
+4. `pnpm dev:backend`
+5. `pnpm dev:front`
+
+### First-Time Initialization Notes
+
+`pnpm db:push` creates the database schema only. It does not automatically insert an admin user, roles, menus, dictionaries, or other business data.
+
+So on a completely fresh local database:
+
+- the backend can still start normally
+- the frontend can still open normally
+- but you may not be able to fully use the system until initial admin and menu data are prepared
+
+To get the full admin experience locally, it is recommended to prepare at least:
+
+- one admin account
+- base role data
+- base menu data
+- user-role and role-menu relation data
+
+### Sample Data Recommendation
+
+If you plan to publish this repository as an open-source project, it is a good idea to make it explicit that the project does not automatically bundle full demo data, and that first-time users may need a minimal initialization dataset.
+
+The minimum recommended dataset usually includes:
+
+- an admin account
+- a super admin role
+- a dashboard menu
+- menus for user, role, menu, department, and dictionary management
+- user-role relations
+- role-menu relations
+
+Two practical approaches are recommended:
+
+- Option 1: provide an initialization SQL file for manual import
+- Option 2: add a seed script later so users can populate base data right after `pnpm db:push`
+
+If the repository does not yet include a built-in seed process, README should state that clearly so users do not assume that schema creation alone is enough for a full login experience
+
+### Import The Built-In Demo SQL
+
+The repository already includes a demo SQL file at the root:
+
+- [admin_system_dump_utf8.sql](./admin_system_dump_utf8.sql)
+
+If your local PostgreSQL container is already running and mapped as `15432:5432`, you can import the demo data with the steps below.
+
+1. Make sure PostgreSQL is running
+
+```bash
+docker ps
+```
+
+2. Create the `admin_system` database if it does not exist yet
+
+```bash
+docker exec -it nestjs-project1-postgres psql -U postgres -c "CREATE DATABASE admin_system;"
+```
+
+3. If you want to replace the current local data with the full demo dataset, recreate the database first
+
+```bash
+docker exec -it nestjs-project1-postgres psql -U postgres -c "DROP DATABASE IF EXISTS admin_system;"
+docker exec -it nestjs-project1-postgres psql -U postgres -c "CREATE DATABASE admin_system;"
+```
+
+4. Import the SQL file
+
+Windows PowerShell:
+
+```powershell
+Get-Content .\admin_system_dump_utf8.sql | docker exec -i nestjs-project1-postgres psql -U postgres -d admin_system
+```
+
+macOS / Linux / Git Bash:
+
+```bash
+docker exec -i nestjs-project1-postgres psql -U postgres -d admin_system < admin_system_dump_utf8.sql
+```
+
+5. Start the backend and frontend after the import
+
+```bash
+pnpm dev:backend
+pnpm dev:front
+```
+
+After the import, you can use the built-in admin, role, menu, and other base data for a smoother local demo experience.
+
+### Local URLs
 
 - Frontend: `http://localhost:5173`
 - Backend: `http://localhost:3101`
 - API Docs: `http://localhost:3101/api-docs`
 - OpenAPI JSON: `http://localhost:3101/api-docs-json`
 - MinIO Console: `http://localhost:19001`
+
+### Local Integration Notes
+
+- The frontend dev server proxies `/api` to `http://localhost:3101`
+- You do not need to hardcode a backend domain for local frontend/backend integration
+- As long as the backend is running locally, the frontend can call it directly
+- Local development uses local environment settings and does not affect your production server configuration
+
+### Common Issues
+
+- `pnpm db:push` succeeds but login still fails:
+  the database schema exists, but the admin account or base menu data is still missing
+- The frontend opens but API requests fail:
+  make sure the backend is really running at `http://localhost:3101`
+- File upload fails:
+  make sure MinIO is started and available on `19000 / 19001`
 
 ### Online Demo
 
