@@ -14,6 +14,14 @@ const request = axios.create({
 // 请求拦截器
 request.interceptors.request.use(
   config => {
+    if (config.data instanceof FormData) {
+      if (typeof config.headers?.setContentType === 'function') {
+        config.headers.setContentType(undefined)
+      } else if (config.headers) {
+        delete config.headers['Content-Type']
+      }
+    }
+
     // 从 localStorage 获取 token
     const token = localStorage.getItem('token')
     if (token) {

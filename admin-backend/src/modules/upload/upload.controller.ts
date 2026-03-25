@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Get,
+  Delete,
   UseInterceptors,
   UploadedFiles,
   UseGuards,
@@ -198,5 +199,18 @@ export class UploadController {
     });
 
     result.stream.pipe(res);
+  }
+
+  // 删除文件或图片
+  @Delete('file/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('Authorization')
+  @ApiOperation({ summary: '删除文件或图片' })
+  @ApiResponse({ status: 200, description: '删除成功' })
+  async removeFile(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: any,
+  ) {
+    return await this.uploadService.removeFileById(id, user);
   }
 }

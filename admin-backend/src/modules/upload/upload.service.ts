@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { MinioService } from './minio.service';
 import { PrismaService } from '../../infrastructure';
 
@@ -213,5 +213,47 @@ export class UploadService {
       contentType: metadata.metaData['content-type'] || file.mimeType,
       contentDisposition: `attachment; filename="${encodeURIComponent(file.originalName)}"; filename*=UTF-8''${encodeURIComponent(file.originalName)}`,
     };
+  }
+
+  // 删除文件（根据文件ID）
+  async removeFileById(fileId: number, user: any) {
+    const file = await this.prisma.file.findUnique({
+      where: { id: fileId, status: 1 },
+    });
+
+    if (!file) {
+      throw new NotFoundException('文件不存在或已被删除');
+    }
+
+    const isAdmin = (user?.roles || []).some((item: any) => item?.role?.code === 'admin');
+    const isOwner = file.userId === user?.id;
+
+    if (!isAdmin && !isOwner) {
+      throw new ForbiddenException('无权删除该文件');
+    }
+
+    const bucketType = this.mapBucketType(file.bucketType);
+    const existsInStorage = await this.minioService.fileExists(file.fileName, bucketType);
+
+    if (existsInStorage) {
+      await this.minioService.deleteFile(file.fileName, bucketType);
+    }
+
+    await this.prisma.$transaction([
+      this.prisma.file.update({
+        where: { id: fileId },
+        data: { status: 0 },
+      }),
+      this.prisma.user.updateMany({
+        where: { avatarId: fileId },
+        data: {
+          avatar: null,
+          avatarId: null,
+          avatarName: null,
+        },
+      }),
+    ]);
+
+    return { message: '删除成功' };
   }
 }
