@@ -1,10 +1,48 @@
-# Nest Front + Backend Monorepo
+# NestJS Admin System + Vue 3 / Vue3 Admin Template | RBAC Permission Management Monorepo
 
 [中文](#中文说明) | [English](#english)
 
+Enterprise-ready admin system monorepo built with NestJS, Vue 3, Vue3, Prisma, PostgreSQL, Redis, and MinIO. Suitable for admin dashboard, RBAC permission management, file upload management, back-office platform, and internal system starter projects.
+
+面向企业后台与管理中台场景的 `NestJS + Vue3` 单仓项目，覆盖 `RBAC 权限管理`、`用户角色菜单部门字典`、`MinIO 文件上传`、`Prisma + PostgreSQL`、`Redis` 与 `前后端联调` 能力。
+
+Keywords: `nestjs`, `vue3`, `admin system`, `admin template`, `rbac`, `permission management`, `minio`, `file upload`, `prisma`, `postgresql`, `redis`, `monorepo`
+
+### Core Features
+
+- JWT 登录认证与 RBAC 权限管理
+- 用户管理、角色管理、菜单管理、部门管理、字典管理
+- 动态菜单、按钮权限、权限指令
+- MinIO 文件上传与资源管理
+- NestJS + Prisma + PostgreSQL + Redis 后端能力
+- Vue 3 + Vite + Element Plus 管理后台前端
+- 适合作为后台管理系统、权限平台、运营平台、数据中台基础底座
+
+### Quick Links
+
+- Demo: [http://cow.zenoly.cn/login](http://cow.zenoly.cn/login)
+- API Docs: [http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81](http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81)
+- Frontend: [admin-front/README.md](./admin-front/README.md)
+- Backend: [admin-backend/README.md](./admin-backend/README.md)
+
 ## 中文说明
 
-这是一个把后台管理系统前端和后端整合到同一个仓库中的 monorepo，也是一个面向企业级后台场景打造的 RBAC 一体化权限管理平台。
+这是一个面向企业后台场景的 `NestJS + Vue 3` 管理后台 monorepo，也是一个可直接二开的 `RBAC 权限管理系统 / 后台管理模板 / Admin System Starter`。
+
+### 搜索关键词
+
+如果你正在 GitHub 搜索下面这些关键词，这个仓库就是对应方向的项目：
+
+- nestjs / NestJS / nest js
+- vue3 / Vue3 / Vue 3
+- NestJS 后台管理系统
+- Vue 3 管理后台 / Vue 3 admin template
+- RBAC 权限管理系统 / 权限管理平台
+- 文件上传系统 / 文件管理后台 / Minio 文件上传
+- 后台管理系统脚手架 / admin dashboard starter
+- NestJS + Prisma + PostgreSQL + Redis + MinIO
+- 数据中台权限系统底座 / 管理中台基础项目
+- 企业级 admin 系统 / monorepo 管理平台
 
 它不是“只能演示页面”的后台模板，也不是“只有接口缺少业务骨架”的半成品，而是一套可以直接落地、继续二开、适合作为真实项目底座的后台基础设施：
 
@@ -45,7 +83,15 @@
 - 演示密码：`123456`
 - 后端接口文档：[http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81](http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81)
 
-![alt text](image.png) ![alt text](image-1.png)![alt text](image-2.png)![alt text](image-3.png)![alt text](image-4.png)![alt text](image-5.png)![alt text](image-6.png)![alt text](image-7.png)
+![NestJS Vue 3 admin system login page](image.png)
+![Vue 3 admin dashboard home page](image-1.png)
+![RBAC user management page](image-2.png)
+![Role and permission management page](image-3.png)
+![Menu management page](image-4.png)
+![Department management page](image-5.png)
+![Dictionary management page](image-6.png)
+![File upload management page](image-7.png)
+
 ### 你能直接拿去做什么
 
 - 作为公司内部管理后台的初始工程
@@ -57,6 +103,7 @@
 
 - 企业内部管理后台
 - 中后台权限平台 / 系统管理平台
+- 数据中台、资产平台、运营平台中的账号权限与系统管理底座
 - 需要用户、角色、菜单、字典、上传能力的业务系统
 - 希望“拿来即用”同时又保留二次开发空间的实战项目
 
@@ -306,6 +353,23 @@ pnpm db:push
 
 ## English
 
+Enterprise-ready `NestJS + Vue 3 / Vue3` admin system monorepo for RBAC permission management, admin dashboard, file upload management, back-office platform, and internal tools.
+
+### Search Keywords
+
+- nestjs / nest js
+- vue3 / vue 3
+- nestjs admin system
+- NestJS admin template
+- Vue 3 admin dashboard
+- file upload admin system
+- MinIO file upload starter
+- RBAC admin system
+- Permission management platform
+- data platform permission foundation
+- NestJS Prisma PostgreSQL Redis MinIO starter
+- Monorepo back-office platform
+
 This repository is organized as a single monorepo for an enterprise-ready RBAC admin platform.
 
 It is not just a visual admin template and not merely a set of backend endpoints. It is meant to serve as a production-oriented foundation that teams can launch with, extend, and keep evolving:
@@ -346,7 +410,6 @@ It focuses on three things:
 - Demo account: `admin`
 - Demo password: `123456`
 - API docs: [http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81](http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81)
-- For a stronger GitHub presentation, it is recommended to add screenshots for the login page, user management, role/menu management, and dictionary management
 
 ### What You Can Build With It
 
