@@ -1,10 +1,11 @@
 # NestJS Admin System + Vue 3 / Vue3 Admin Template | RBAC Permission Management Monorepo
 
+面向企业后台与管理中台场景的 NestJS + Vue3 单仓项目，覆盖 RBAC 权限管理、用户角色菜单部门字典、MinIO 文件上传、Prisma + PostgreSQL、Redis 与 前后端联调 能力。
+
 [中文](#中文说明) | [English](#english)
 
 Enterprise-ready admin system monorepo built with NestJS, Vue 3, Vue3, Prisma, PostgreSQL, Redis, and MinIO. Suitable for admin dashboard, RBAC permission management, file upload management, back-office platform, and internal system starter projects.
 
-面向企业后台与管理中台场景的 `NestJS + Vue3` 单仓项目，覆盖 `RBAC 权限管理`、`用户角色菜单部门字典`、`MinIO 文件上传`、`Prisma + PostgreSQL`、`Redis` 与 `前后端联调` 能力。
 
 Keywords: `nestjs`, `nest`,`nest.js`,`NestJS`,`vue3`, `admin system`, `admin template`, `rbac`,`RBAC`, `permission management`, `minio`, `file upload`, `prisma`, `postgresql`, `redis`, `monorepo`,`后台管理系统`
 
