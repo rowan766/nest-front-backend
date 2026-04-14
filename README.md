@@ -108,6 +108,7 @@
 - 演示账号：`admin`
 - 演示密码：`123456`
 - 后端接口文档：[http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81](http://cow.zenoly.cn/api-docs#tag/%E8%AE%A4%E8%AF%81)
+- 如果你觉得还不错，麻烦右上角点亮个小星星，非常感谢
 
 ![NestJS Vue 3 admin system login page](image.png)
 ![Vue 3 admin dashboard home page](image-1.png)
